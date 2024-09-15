@@ -9,6 +9,8 @@ import { isImageSourcePropType } from '@/types/guards/image';
 import SendImage from '@/theme/assets/images/send.png';
 import ColorsWatchImage from '@/theme/assets/images/colorswatch.png';
 import TranslateImage from '@/theme/assets/images/translate.png';
+import { Box } from '@gluestack-ui/themed';
+import { Text } from '@/components/atoms';
 
 function Home() {
 	const { t } = useTranslation(['example', 'welcome']);
@@ -35,13 +37,15 @@ function Home() {
 	return (
 		<SafeScreen>
 			<ScrollView>
-				<View
+				<Box
 					style={[
 						layout.justifyCenter,
 						layout.itemsCenter,
 						gutters.marginTop_80,
 					]}
-				/>
+				>
+					<Text>Hello</Text>
+				</Box>
 			</ScrollView>
 		</SafeScreen>
 	);
