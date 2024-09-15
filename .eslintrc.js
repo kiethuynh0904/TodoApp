@@ -39,6 +39,7 @@ module.exports = {
 		},
 	},
 	rules: {
+		'import/no-cycle': ['off', { maxDepth: 1 }],
 		'@typescript-eslint/no-unused-vars': 'error',
 		'global-require': 0,
 		'react-hooks/exhaustive-deps': 'off',
