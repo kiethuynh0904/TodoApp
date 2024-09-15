@@ -4,13 +4,13 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
-    "ios": "react-native run-ios",
+    "ios": "react-native run-ios --simulator=\"iPhone 13\"",
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest",
     "type-check": "tsc",
     "test:report": "jest --collectCoverage --coverageDirectory=\"./coverage\" --ci --reporters=default --reporters=jest-junit --coverage",
-    "pod-install": "cd ios && pod install && cd ..",
+    "pod-install": "cd ios && bundle exec pod install && cd ..",
     "postinstall": "npx patch-package"
   },
   "dependencies": {
