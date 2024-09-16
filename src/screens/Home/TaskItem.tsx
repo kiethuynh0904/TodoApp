@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unstable-nested-components */
 import { Pressable } from 'react-native';
 import Animated, {
 	useAnimatedStyle,
@@ -9,20 +10,30 @@ import {
 	Box,
 	HStack,
 	VStack,
-	Text,
 	Checkbox,
 	CheckboxIndicator,
 	CheckboxIcon,
 	CheckIcon,
 	TrashIcon,
 	Badge,
-	BadgeIcon,
 	BadgeText,
-	CircleIcon,
+	CheckboxLabel,
+	EditIcon,
+	Menu,
+	ButtonText,
+	Button,
+	MenuItem,
+	Icon,
+	MenuItemLabel,
+	ThreeDotsIcon,
 } from '@gluestack-ui/themed';
-import { Task, TaskStatus } from '@/store/useTasks';
+import { Task, TaskPriority, TaskStatus } from '@/store/useTasks';
 import { FunctionComponent } from '@/types/guards/common';
 import { useTheme } from '@/theme';
+import { useMemo } from 'react';
+import { Text } from '@/components/atoms';
+import { useNavigation } from '@react-navigation/native';
+import { RootScreenProps } from '@/types/navigation';
 
 interface TaskItemProps {
 	item: Task;
@@ -35,95 +46,129 @@ function TaskItem({
 	toggleTaskStatus,
 	removeTask,
 }: TaskItemProps): FunctionComponent {
-	const { layout } = useTheme();
+	const navigation = useNavigation<RootScreenProps['navigation']>();
+	const { layout, backgrounds, borders, fonts, gutters } = useTheme();
 	const taskAnimatedStyle = useAnimatedStyle(() => {
 		return {
-			transform: [
-				{ scale: withSpring(item.status === TaskStatus.DONE ? 0.95 : 1) },
-			],
-			opacity: withTiming(item.status === TaskStatus.DONE ? 0.5 : 1),
-			backgroundColor: item.status === TaskStatus.DONE ? '$gray100' : '$white',
-			shadowColor: '#000',
-			shadowOffset: { width: 0, height: 2 },
-			shadowOpacity: 0.1,
-			shadowRadius: 4,
+			// transform: [
+			// 	{ scale: withSpring(item.status === TaskStatus.DONE ? 0.95 : 1) },
+			// ],
+			// opacity: withTiming(item.status === TaskStatus.DONE ? 0.5 : 1),
 		};
 	});
 
-	const removeTaskAnimatedStyle = useAnimatedStyle(() => {
-		return {
-			transform: [
-				withSequence(
-					withTiming({ scale: 1.1 }, { duration: 150 }),
-					withTiming({ scale: 0 }, { duration: 200 }),
-				),
-			],
-			opacity: withTiming(0),
-		};
-	});
+	const taskBgColor = useMemo(() => {
+		switch (item.priority) {
+			case TaskPriority.HIGH:
+				return backgrounds.red100;
+			case TaskPriority.MEDIUM:
+				return backgrounds.yellow100;
+			case TaskPriority.LOW:
+				return backgrounds.green100;
+			default:
+				return backgrounds.green100;
+		}
+	}, [item.priority]);
 
 	return (
 		<Animated.View style={taskAnimatedStyle}>
 			<Box
-				borderWidth={1}
-				borderColor="$gray200"
-				borderRadius="$lg"
-				my="$2"
-				p="$3"
+				style={[
+					taskBgColor,
+					borders.rounded_16,
+					gutters.padding_16,
+					gutters.marginVertical_8,
+				]}
 			>
-				<HStack space="md" alignItems="center">
-					<Checkbox
-						value={item.id}
-						isChecked={item.status === TaskStatus.DONE}
-						size="md"
-						onChange={() => toggleTaskStatus(item.id)}
-					>
-						<CheckboxIndicator mr="$2">
-							<CheckboxIcon color="white" as={CheckIcon} />
-						</CheckboxIndicator>
-					</Checkbox>
-					<VStack space="sm" flex={1}>
+				<HStack space="md" alignItems="flex-start">
+					<VStack space="sm" flex={1} alignItems="flex-start">
+						<Box
+							width={70}
+							style={[
+								borders.w_1,
+								borders.gray400,
+								borders.rounded_32,
+								gutters.padding_8,
+								layout.justifyCenter,
+								layout.itemsCenter,
+							]}
+						>
+							<Text style={[fonts.gray400, fonts.size_12, fonts.bold]}>
+								{item.status}
+							</Text>
+						</Box>
 						<Text
-							fontWeight="$bold"
-							fontSize="$lg"
-							color={item.status === TaskStatus.DONE ? '$gray400' : '$gray800'}
 							textDecorationLine={
 								item.status === TaskStatus.DONE ? 'line-through' : 'none'
 							}
+							style={[fonts.bold, fonts.size_16]}
 						>
 							{item.title}
 						</Text>
 						<Text
-							fontSize="$sm"
-							color={item.status === TaskStatus.DONE ? '$gray400' : '$gray600'}
 							textDecorationLine={
 								item.status === TaskStatus.DONE ? 'line-through' : 'none'
 							}
+							style={[fonts.size_12, fonts.gray400]}
 						>
 							{item.description}
 						</Text>
+						<Checkbox
+							value={item.id}
+							isChecked={item.status === TaskStatus.DONE}
+							size="md"
+							onChange={() => toggleTaskStatus(item.id)}
+						>
+							<CheckboxIndicator mr="$2">
+								<CheckboxIcon color="white" as={CheckIcon} />
+							</CheckboxIndicator>
+							<CheckboxLabel style={fonts.size_12}>Mark as done</CheckboxLabel>
+						</Checkbox>
 					</VStack>
-					{item.deadline && (
+					{item.deadline && new Date(item.deadline) < new Date() && (
 						<Badge
 							style={[layout.absolute]}
-							top={10}
-							right={20}
-							bgColor={
-								new Date(item.deadline) < new Date() ? '$red500' : '$green500'
-							}
+							top={-25}
+							right={25}
+							bgColor="$red500"
 						>
-							<BadgeText color="$white">
-								{new Date(item.deadline).toDateString()}
+							<BadgeText style={[fonts.size_12, fonts.bold]} color="$white">
+								EXPIRED
 							</BadgeText>
-							{/* <BadgeIcon as={CircleIcon} color="$white" /> */}
 						</Badge>
 					)}
-					<Pressable
-						onPress={() => removeTask(item.id)}
-						hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+
+					<Menu
+						placement="left"
+						trigger={({ ...triggerProps }) => {
+							return (
+								<Pressable {...triggerProps}>
+									<Icon
+										style={{ transform: [{ rotate: '90deg' }] }}
+										as={ThreeDotsIcon}
+									/>
+								</Pressable>
+							);
+						}}
 					>
-						<TrashIcon size="sm" color="$red500" />
-					</Pressable>
+						<MenuItem
+							onPress={() => removeTask(item.id)}
+							key="Delete"
+							textValue="Delete"
+						>
+							<Icon as={TrashIcon} size="sm" mr="$2" />
+							<MenuItemLabel size="sm">Delete</MenuItemLabel>
+						</MenuItem>
+						<MenuItem
+							onPress={() => navigation.navigate('EditTask', { task: item })}
+							key="Edit"
+							textValue="Edit"
+						>
+							{/* PuzzleIcon is imported from 'lucide-react-native' */}
+							<Icon as={EditIcon} size="sm" mr="$2" />
+							<MenuItemLabel size="sm">Edit</MenuItemLabel>
+						</MenuItem>
+					</Menu>
 				</HStack>
 			</Box>
 		</Animated.View>

@@ -3,7 +3,8 @@ import { DarkTheme, DefaultTheme } from '@react-navigation/native';
 import type { ThemeConfiguration } from '@/types/theme/config';
 
 const colorsLight = {
-	red500: '#C13333',
+	white: '#FFFFFF',
+	black: '#000000',
 	gray800: '#303030',
 	gray400: '#4D4D4D',
 	gray200: '#A1A1A1',
@@ -12,10 +13,16 @@ const colorsLight = {
 	purple500: '#44427D',
 	purple100: '#E1E1EF',
 	purple50: '#1B1A23',
+	yellow100: '#f9e8a0',
+	yellow400: '#eed047',
+	red100: '#fcd6c8',
+	red400: '#d66262',
+	red500: '#C13333',
+	green100: '#cffac6',
+	green400: '#0ec225',
 } as const;
 
 const colorsDark = {
-	red500: '#C13333',
 	gray800: '#E0E0E0',
 	gray400: '#969696',
 	gray200: '#BABABA',
@@ -24,9 +31,17 @@ const colorsDark = {
 	purple500: '#A6A4F0',
 	purple100: '#252732',
 	purple50: '#1B1A23',
+	yellow100: '#f9e8a0',
+	yellow400: '#eed047',
+	red100: '#fcd6c8',
+	red400: '#d66262',
+	red500: '#C13333',
+	green100: '#cffac6',
+	green400: '#0ec225',
 } as const;
 
-const sizes = [12, 16, 24, 32, 40, 80] as const;
+const sizes = [12, 14, 16, 18, 24, 32, 40, 80] as const;
+const gutterSizes = [4, 8, 12, 16, 24, 32] as const;
 
 export const config = {
 	colors: colorsLight,
@@ -34,11 +49,11 @@ export const config = {
 		sizes,
 		colors: colorsLight,
 	},
-	gutters: sizes,
+	gutters: gutterSizes,
 	backgrounds: colorsLight,
 	borders: {
 		widths: [1, 2],
-		radius: [4, 16],
+		radius: [4, 16, 32, 64],
 		colors: colorsLight,
 	},
 	navigationColors: {

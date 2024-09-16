@@ -18,11 +18,11 @@ const config = createConfig({
 	...defaultConfig,
 	tokens: {
 		...defaultConfig.tokens,
-		fonts: {
-			heading: 'DMSans', // Heading component uses this by default
-			body: 'Inter', // Text component uses this by default
-			mono: 'Inter',
-		},
+		// fonts: {
+		// 	heading: 'DMSans', // Heading component uses this by default
+		// 	body: 'Inter', // Text component uses this by default
+		// 	mono: 'Inter',
+		// },
 		colors: {
 			...defaultConfig.tokens.colors,
 			emerald700: '#004D40',

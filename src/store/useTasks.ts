@@ -3,9 +3,15 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
 export enum TaskStatus {
-	TODO = 'TODO',
-	IN_PROGRESS = 'IN_PROGRESS',
-	DONE = 'DONE',
+	TODO = 'Todo',
+	IN_PROGRESS = 'In Progress',
+	DONE = 'Done',
+}
+
+export enum TaskPriority {
+	LOW = 'Low',
+	MEDIUM = 'Medium',
+	HIGH = 'High',
 }
 
 const zustandStorage = {
@@ -27,43 +33,21 @@ export interface Task {
 	description: string;
 	status: TaskStatus;
 	deadline: Date;
+	priority: TaskPriority;
 }
-
-const dummyTasks: Task[] = [
-	{
-		id: '1',
-		title: 'Grocery Shopping',
-		description: 'Buy milk, eggs, bread, and cheese from the supermarket.',
-		status: TaskStatus.TODO,
-		deadline: new Date(),
-	},
-	{
-		id: '2',
-		title: 'Book Doctor Appointment',
-		description: 'Schedule a check-up appointment for next week.',
-		status: TaskStatus.IN_PROGRESS,
-		deadline: new Date(),
-	},
-	{
-		id: '3',
-		title: 'Pay Bills',
-		description: 'Pay electricity and internet bills by the due date.',
-		status: TaskStatus.DONE,
-		deadline: new Date(),
-	},
-];
 
 interface TaskStore {
 	tasks: Task[];
 	toggleTaskStatus: (id: string) => void;
 	removeTask: (id: string) => void;
 	addTask: (task: Omit<Task, 'id'>) => void;
+	editTask: (id: string, updatedTask: Omit<Task, 'id'>) => void;
 }
 
 export const useTaskStore = create(
 	persist<TaskStore>(
 		set => ({
-			tasks: dummyTasks,
+			tasks: [],
 			toggleTaskStatus: (id: string) =>
 				set(state => ({
 					tasks: state.tasks.map(task =>
@@ -85,6 +69,15 @@ export const useTaskStore = create(
 			addTask: (task: Omit<Task, 'id'>) =>
 				set(state => ({
 					tasks: [...state.tasks, { ...task, id: Date.now().toString() }],
+				})),
+			editTask: (
+				id: string,
+				updatedTask: Omit<Task, 'id'>, // New method implementation
+			) =>
+				set(state => ({
+					tasks: state.tasks.map(task =>
+						task.id === id ? { ...task, ...updatedTask } : task,
+					),
 				})),
 		}),
 		{

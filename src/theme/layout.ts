@@ -78,4 +78,18 @@ export default {
 	z10: {
 		zIndex: 10,
 	},
+	shadow0: {
+		elevation: 2,
+		shadowColor: 'rgba(0, 0, 0, 0.25)',
+		shadowOffset: { width: 0, height: 4 },
+		shadowOpacity: 1,
+		shadowRadius: 4,
+	},
+	shadow1: {
+		elevation: 2,
+		shadowColor: 'rgba(0, 0, 0, 0.04)',
+		shadowOffset: { width: 0, height: 5 },
+		shadowOpacity: 1,
+		shadowRadius: 10,
+	},
 } as const satisfies Record<string, ViewStyle>;

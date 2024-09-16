@@ -2,7 +2,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import { Home, Startup } from '@/screens';
+import { Home, Startup, NewTask, EditTask } from '@/screens';
 import { useTheme } from '@/theme';
 
 import type { RootStackParamList } from '@/types/navigation';
@@ -21,6 +21,16 @@ function ApplicationNavigator() {
 						name="Home"
 						options={{ headerShown: true }}
 						component={Home}
+					/>
+					<Stack.Screen
+						name="NewTask"
+						options={{ headerShown: true }}
+						component={NewTask}
+					/>
+					<Stack.Screen
+						name="EditTask"
+						options={{ headerShown: true }}
+						component={EditTask}
 					/>
 				</Stack.Navigator>
 			</NavigationContainer>
