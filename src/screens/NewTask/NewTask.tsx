@@ -26,7 +26,15 @@ import { RootScreenProps } from '@/types/navigation';
 import { SafeScreen } from '@/components/template';
 
 function NewTask(): FunctionComponent {
-	const { layout, backgrounds, gutters, fonts, borders } = useTheme();
+	const {
+		layout,
+		backgrounds,
+		gutters,
+		fonts,
+		borders,
+		navigationTheme,
+		variant,
+	} = useTheme();
 	const navigation = useNavigation<RootScreenProps['navigation']>();
 	const [newTaskTitle, setNewTaskTitle] = useState('');
 	const [newTaskDescription, setNewTaskDescription] = useState('');
@@ -78,12 +86,8 @@ function NewTask(): FunctionComponent {
 				)}
 				<FormControl>
 					<FormControlLabel
-						style={[
-							layout.z10,
-							layout.absolute,
-							backgrounds.gray50,
-							gutters.paddingHorizontal_8,
-						]}
+						bgColor={navigationTheme.colors.background}
+						style={[layout.z10, layout.absolute, gutters.paddingHorizontal_8]}
 						top="-$2.5"
 						left={12}
 					>
@@ -98,17 +102,14 @@ function NewTask(): FunctionComponent {
 							value={newTaskTitle}
 							onChangeText={setNewTaskTitle}
 							placeholder="Enter Title"
+							style={[fonts.gray800]}
 						/>
 					</Input>
 				</FormControl>
 				<FormControl>
 					<FormControlLabel
-						style={[
-							layout.z10,
-							layout.absolute,
-							backgrounds.gray50,
-							gutters.paddingHorizontal_8,
-						]}
+						bgColor={navigationTheme.colors.background}
+						style={[layout.z10, layout.absolute, gutters.paddingHorizontal_8]}
 						top="-$2.5"
 						left={12}
 					>
@@ -121,6 +122,7 @@ function NewTask(): FunctionComponent {
 					<Input variant="outline" size="md" borderRadius="$md" h={46}>
 						<InputField
 							value={newTaskDescription}
+							style={[fonts.gray800]}
 							onChangeText={setNewTaskDescription}
 							placeholder="Enter Description"
 						/>
@@ -134,6 +136,7 @@ function NewTask(): FunctionComponent {
 						is24Hour
 						display="default"
 						onChange={handleDateChange} // Handle date change
+						themeVariant={variant === 'dark' ? 'dark' : 'light'}
 					/>
 				</Box>
 				<Box>
@@ -148,10 +151,10 @@ function NewTask(): FunctionComponent {
 									borders.rounded_16,
 									borders.w_1,
 									borders.red400,
-									selectedPriority === TaskPriority.HIGH && backgrounds.red100, // Highlight selected
+									selectedPriority === TaskPriority.HIGH && backgrounds.red400, // Highlight selected
 								]}
 							>
-								<Text>High</Text>
+								<Text style={fonts.bold}>High</Text>
 							</Box>
 						</Pressable>
 						<Pressable onPress={() => setSelectedPriority(TaskPriority.MEDIUM)}>
@@ -164,10 +167,10 @@ function NewTask(): FunctionComponent {
 									borders.w_1,
 									borders.yellow400,
 									selectedPriority === TaskPriority.MEDIUM &&
-										backgrounds.yellow100, // Highlight selected
+										backgrounds.yellow400, // Highlight selected
 								]}
 							>
-								<Text>Medium</Text>
+								<Text style={fonts.bold}>Medium</Text>
 							</Box>
 						</Pressable>
 						<Pressable onPress={() => setSelectedPriority(TaskPriority.LOW)}>
@@ -179,23 +182,26 @@ function NewTask(): FunctionComponent {
 									borders.rounded_16,
 									borders.w_1,
 									borders.green400,
-									selectedPriority === TaskPriority.LOW && backgrounds.green100, // Highlight selected
+									selectedPriority === TaskPriority.LOW && backgrounds.green400, // Highlight selected
 								]}
 							>
-								<Text>Low</Text>
+								<Text style={fonts.bold}>Low</Text>
 							</Box>
 						</Pressable>
 					</HStack>
 				</Box>
 				<Button
-					size="md"
+					mt="$4"
+					size="lg"
 					rounded="$2xl"
 					variant="solid"
 					action="primary"
 					isFocusVisible={false}
 					onPress={handleAddTask}
 				>
-					<ButtonText>Add Task</ButtonText>
+					<ButtonText style={[fonts.bold, fonts.size_18]}>
+						Create Task
+					</ButtonText>
 				</Button>
 			</VStack>
 		</SafeScreen>

@@ -26,8 +26,8 @@ const config = createConfig({
 		colors: {
 			...defaultConfig.tokens.colors,
 			emerald700: '#004D40',
-			// primary500: '#004D40',
-			// primary700: '#004036',
+			primary500: '#e26e5e',
+			primary700: '#ff7461',
 		},
 	},
 	plugins: [...defaultConfig.plugins, CustomFontResolver],

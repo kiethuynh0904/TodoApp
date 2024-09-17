@@ -17,11 +17,7 @@ function ApplicationNavigator() {
 			<NavigationContainer theme={navigationTheme}>
 				<Stack.Navigator key={variant} screenOptions={{ headerShown: false }}>
 					<Stack.Screen name="Startup" component={Startup} />
-					<Stack.Screen
-						name="Home"
-						options={{ headerShown: true }}
-						component={Home}
-					/>
+					<Stack.Screen name="Home" component={Home} />
 					<Stack.Screen
 						name="NewTask"
 						options={{ headerShown: true }}

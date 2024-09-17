@@ -14,7 +14,7 @@ export function Text({
 }: TextProps): FunctionComponent {
 	const { fonts } = useTheme();
 	return (
-		<GlueStackText style={[fonts.gray800, props.style]} {...props}>
+		<GlueStackText {...props} style={[fonts.gray800, props.style]}>
 			{children}
 		</GlueStackText>
 	);

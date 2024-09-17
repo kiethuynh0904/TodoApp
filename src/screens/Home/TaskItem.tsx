@@ -20,8 +20,6 @@ import {
 	CheckboxLabel,
 	EditIcon,
 	Menu,
-	ButtonText,
-	Button,
 	MenuItem,
 	Icon,
 	MenuItemLabel,
@@ -34,6 +32,7 @@ import { useMemo } from 'react';
 import { Text } from '@/components/atoms';
 import { useNavigation } from '@react-navigation/native';
 import { RootScreenProps } from '@/types/navigation';
+import { formatDate } from '@/utils';
 
 interface TaskItemProps {
 	item: Task;
@@ -47,7 +46,9 @@ function TaskItem({
 	removeTask,
 }: TaskItemProps): FunctionComponent {
 	const navigation = useNavigation<RootScreenProps['navigation']>();
-	const { layout, backgrounds, borders, fonts, gutters } = useTheme();
+	const { layout, backgrounds, borders, fonts, gutters, variant } = useTheme();
+	const isDarkTheme = variant === 'dark';
+
 	const taskAnimatedStyle = useAnimatedStyle(() => {
 		return {
 			// transform: [
@@ -57,46 +58,34 @@ function TaskItem({
 		};
 	});
 
-	const taskBgColor = useMemo(() => {
-		switch (item.priority) {
-			case TaskPriority.HIGH:
-				return backgrounds.red100;
-			case TaskPriority.MEDIUM:
-				return backgrounds.yellow100;
-			case TaskPriority.LOW:
-				return backgrounds.green100;
-			default:
-				return backgrounds.green100;
-		}
-	}, [item.priority]);
-
 	return (
 		<Animated.View style={taskAnimatedStyle}>
 			<Box
 				style={[
-					taskBgColor,
+					backgrounds.gray500,
 					borders.rounded_16,
 					gutters.padding_16,
 					gutters.marginVertical_8,
+					layout.shadow1,
 				]}
 			>
 				<HStack space="md" alignItems="flex-start">
 					<VStack space="sm" flex={1} alignItems="flex-start">
-						<Box
-							width={70}
-							style={[
-								borders.w_1,
-								borders.gray400,
-								borders.rounded_32,
-								gutters.padding_8,
-								layout.justifyCenter,
-								layout.itemsCenter,
-							]}
+						<Badge
+							bg={
+								{
+									[TaskPriority.HIGH]: backgrounds.red400.backgroundColor,
+									[TaskPriority.MEDIUM]: backgrounds.yellow400.backgroundColor,
+									[TaskPriority.LOW]: backgrounds.green400.backgroundColor,
+								}[item.priority]
+							}
+							borderRadius="$lg"
+							variant="solid"
 						>
-							<Text style={[fonts.gray400, fonts.size_12, fonts.bold]}>
-								{item.status}
-							</Text>
-						</Box>
+							<BadgeText color="$white" style={[fonts.size_12, fonts.bold]}>
+								{item.priority}
+							</BadgeText>
+						</Badge>
 						<Text
 							textDecorationLine={
 								item.status === TaskStatus.DONE ? 'line-through' : 'none'
@@ -113,30 +102,43 @@ function TaskItem({
 						>
 							{item.description}
 						</Text>
+						<HStack space="xs">
+							<Text
+								textDecorationLine={
+									item.status === TaskStatus.DONE ? 'line-through' : 'none'
+								}
+								style={[fonts.size_12, fonts.gray400]}
+							>
+								Due Date: {formatDate(item.deadline.toString())}
+							</Text>
+							{item.deadline && new Date(item.deadline) < new Date() && (
+								<Text style={[fonts.size_12, fonts.red400]}>(Expired)</Text>
+							)}
+						</HStack>
+
 						<Checkbox
 							value={item.id}
 							isChecked={item.status === TaskStatus.DONE}
 							size="md"
 							onChange={() => toggleTaskStatus(item.id)}
 						>
-							<CheckboxIndicator mr="$2">
-								<CheckboxIcon color="white" as={CheckIcon} />
+							<CheckboxIndicator
+								borderColor="$indigo500"
+								overflow="hidden"
+								rounded="$full"
+								mr="$2"
+							>
+								<CheckboxIcon
+									bgColor="$indigo500"
+									color="white"
+									as={CheckIcon}
+								/>
 							</CheckboxIndicator>
-							<CheckboxLabel style={fonts.size_12}>Mark as done</CheckboxLabel>
+							<CheckboxLabel style={[fonts.size_12, fonts.gray800]}>
+								Mark as done
+							</CheckboxLabel>
 						</Checkbox>
 					</VStack>
-					{item.deadline && new Date(item.deadline) < new Date() && (
-						<Badge
-							style={[layout.absolute]}
-							top={-25}
-							right={25}
-							bgColor="$red500"
-						>
-							<BadgeText style={[fonts.size_12, fonts.bold]} color="$white">
-								EXPIRED
-							</BadgeText>
-						</Badge>
-					)}
 
 					<Menu
 						placement="left"
@@ -144,6 +146,7 @@ function TaskItem({
 							return (
 								<Pressable {...triggerProps}>
 									<Icon
+										color={isDarkTheme ? '$white' : '$gray500'}
 										style={{ transform: [{ rotate: '90deg' }] }}
 										as={ThreeDotsIcon}
 									/>

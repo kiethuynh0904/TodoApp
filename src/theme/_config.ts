@@ -3,38 +3,43 @@ import { DarkTheme, DefaultTheme } from '@react-navigation/native';
 import type { ThemeConfiguration } from '@/types/theme/config';
 
 const colorsLight = {
+	// components
+	primary700: '#ff7461',
 	white: '#FFFFFF',
 	black: '#000000',
-	gray800: '#303030',
+	gray800: '#303030', // title text
+	gray500: '#FFFFFF',
 	gray400: '#4D4D4D',
 	gray200: '#A1A1A1',
 	gray100: '#DFDFDF',
 	gray50: '#EFEFEF',
-	purple500: '#44427D',
-	purple100: '#E1E1EF',
 	purple50: '#1B1A23',
 	yellow100: '#f9e8a0',
-	yellow400: '#eed047',
+	yellow400: '#cd9a14',
 	red100: '#fcd6c8',
-	red400: '#d66262',
+	red400: '#fd4443',
 	red500: '#C13333',
 	green100: '#cffac6',
 	green400: '#0ec225',
 } as const;
 
 const colorsDark = {
+	// components
+	// common
+	primary700: '#ff7461',
+	white: '#FFFFFF',
+	black: '#000000',
 	gray800: '#E0E0E0',
+	gray500: '#232323',
 	gray400: '#969696',
 	gray200: '#BABABA',
 	gray100: '#000000',
 	gray50: '#EFEFEF',
-	purple500: '#A6A4F0',
-	purple100: '#252732',
-	purple50: '#1B1A23',
+	purple50: '#111111',
 	yellow100: '#f9e8a0',
-	yellow400: '#eed047',
+	yellow400: '#cd9a14',
 	red100: '#fcd6c8',
-	red400: '#d66262',
+	red400: '#fd4443',
 	red500: '#C13333',
 	green100: '#cffac6',
 	green400: '#0ec225',
