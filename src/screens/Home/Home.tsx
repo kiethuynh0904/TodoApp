@@ -1,4 +1,4 @@
-import { ListRenderItem, Pressable } from 'react-native';
+import { ListRenderItem, Platform, Pressable } from 'react-native';
 
 import { SafeScreen } from '@/components/template';
 import { useTheme } from '@/theme';
@@ -161,7 +161,9 @@ function Home() {
 					gutters.paddingHorizontal_12,
 					gutters.paddingTop_12,
 				]}
-				itemLayoutAnimation={LinearTransition}
+				itemLayoutAnimation={
+					Platform.OS === 'ios' ? LinearTransition : undefined
+				}
 			/>
 			<Box
 				position="absolute"

@@ -24,9 +24,11 @@ import DateTimePicker from '@react-native-community/datetimepicker'; // Import D
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { RootScreenProps } from '@/types/navigation';
 import { SafeScreen } from '@/components/template';
+import { Platform } from 'react-native';
+import { formatDate } from '@/utils';
 
 function EditTask(): FunctionComponent {
-	const { layout, backgrounds, gutters, fonts, borders } = useTheme();
+	const { layout, backgrounds, gutters, fonts, borders, variant } = useTheme();
 	const navigation = useNavigation<RootScreenProps<'EditTask'>['navigation']>();
 	const route = useRoute<RootScreenProps['route']>();
 	const task = route.params?.task as Task;
@@ -41,6 +43,8 @@ function EditTask(): FunctionComponent {
 	const [newTaskDeadline, setNewTaskDeadline] = useState<Date>(
 		new Date(task.deadline),
 	);
+	const [show, setShow] = useState(false);
+
 	const { editTask } = useTaskStore();
 
 	const handleDateChange = (
@@ -138,15 +142,49 @@ function EditTask(): FunctionComponent {
 						/>
 					</Input>
 				</FormControl>
-				<Box style={[layout.itemsCenter, layout.row]}>
+				<Box>
 					<Text>Exp Time:</Text>
-					<DateTimePicker
-						value={newTaskDeadline} // Default to current date
-						mode="date"
-						is24Hour
-						display="default"
-						onChange={handleDateChange} // Handle date change
-					/>
+					{Platform.OS === 'ios' && (
+						<DateTimePicker
+							value={newTaskDeadline} // Default to current date
+							mode="date"
+							is24Hour
+							display="default"
+							onChange={handleDateChange} // Handle date change
+							themeVariant={variant === 'dark' ? 'dark' : 'light'}
+						/>
+					)}
+					{Platform.OS === 'android' && (
+						<>
+							<Pressable width="$full" onPress={() => setShow(true)}>
+								<Input
+									isReadOnly
+									variant="outline"
+									size="md"
+									borderRadius="$md"
+									h={46}
+								>
+									<InputField
+										value={formatDate(newTaskDeadline.toString(), 'yyyy-MM-dd')}
+										style={[fonts.gray800]}
+										placeholder="Enter Description"
+									/>
+								</Input>
+							</Pressable>
+
+							{show && (
+								<DateTimePicker
+									value={newTaskDeadline} // Default to current date
+									mode="date"
+									is24Hour
+									display="default"
+									onChange={handleDateChange} // Handle date change
+									themeVariant={variant === 'dark' ? 'dark' : 'light'}
+									onTouchCancel={() => setShow(false)}
+								/>
+							)}
+						</>
+					)}
 				</Box>
 				<Box>
 					<Text>Priority</Text>

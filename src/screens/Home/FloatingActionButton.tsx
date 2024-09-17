@@ -51,6 +51,7 @@ function FloatingActionButton({
 					scale: withDelay(delay, withTiming(scaleValue)),
 				},
 			],
+			zIndex: isExpanded.value ? 10 : -2,
 		};
 	});
 
@@ -65,7 +66,6 @@ function FloatingActionButton({
 					display: 'flex',
 					justifyContent: 'center',
 					alignItems: 'center',
-					zIndex: -2,
 					flexDirection: 'row',
 					width: 40,
 					height: 40,

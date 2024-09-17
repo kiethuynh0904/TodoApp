@@ -1,4 +1,5 @@
 import { storage } from '@/App';
+import isEqual from 'react-fast-compare';
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
@@ -94,17 +95,18 @@ export const useTaskStore = create(
 				set(state => {
 					const newTask = { ...task, id: Date.now().toString() };
 					const updatedTasks = [...state.tasks, newTask];
-					const filteredTasks = [...state.filteredTasks, newTask];
+					let updatedFilteredTasks = [...state.filteredTasks];
+
+					if (
+						updatedFilteredTasks.some(ft => ft.priority === newTask.priority) ||
+						isEqual(state.filteredTasks.length, state.tasks.length)
+					) {
+						updatedFilteredTasks = [...updatedFilteredTasks, newTask];
+					}
 
 					return {
 						tasks: updatedTasks,
-						filteredTasks: filteredTasks.filter(
-							t =>
-								t.priority === newTask.priority ||
-								state.filteredTasks.some(
-									ft => ft.priority === newTask.priority,
-								),
-						), // Update filteredTasks
+						filteredTasks: updatedFilteredTasks, // Update filteredTasks
 					};
 				}),
 			editTask: (id: string, updatedTask: Omit<Task, 'id'>) =>
@@ -147,7 +149,7 @@ export const useTaskStore = create(
 						});
 					} else {
 						// Sort by ID if not enabled
-						sortedTasks.sort((a, b) => a.id.localeCompare(b.id));
+						sortedTasks.sort((a, b) => b.id.localeCompare(a.id));
 					}
 					return { filteredTasks: sortedTasks, enableSorting: enable };
 				}),

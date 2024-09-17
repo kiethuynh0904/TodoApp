@@ -146,7 +146,7 @@ function TaskItem({
 							return (
 								<Pressable {...triggerProps}>
 									<Icon
-										color={isDarkTheme ? '$white' : '$gray500'}
+										color={isDarkTheme ? '$white' : '$black'}
 										style={{ transform: [{ rotate: '90deg' }] }}
 										as={ThreeDotsIcon}
 									/>
