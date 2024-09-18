@@ -5,7 +5,7 @@
 - [Xcode 12](https://developer.apple.com/xcode)
 - [Cocoapods 1.10.1](https://cocoapods.org)
 - [JDK > 11](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html)
-- [Android Studio and Android SDK](https://developer.android.com/studio)
+- [Android Studio and Android SDK](https://developer.android.com/studio) (make sure your ndk > 27 or you need to upgrade it for android build)
 
 ## DEMO
 | Dark Mode | Light Mode |
